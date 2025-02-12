@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Cadastrar Nova Categoria</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Exibe os campos do formulário -->
+        <button type="submit">Cadastrar</button>
+    </form>
+{% endblock %}

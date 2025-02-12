@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Bens{% endblock %}
+
+{% block content %}
+    <h1>Lista de Bens</h1>
+    <ul>
+        {% for bem in bens %}
+            <li>
+                <a href="{% url 'detalhe_bem' bem.id %}">{{ bem.nome }}</a> - Código RFID: {{ bem.codigo_rfid }}
+            </li>
+            <div>
+                <a href="{% url 'editar_bem' bem.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'excluir_bem' bem.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este bem?');">Excluir</a>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}

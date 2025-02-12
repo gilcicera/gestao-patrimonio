@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block content %}
+    <h1>Página de Cadastros</h1>
+    <p>Aqui você pode cadastrar novos bens, categorias, fornecedores e departamentos.</p>
+    <a href="{% url 'cadastrar_categoria' %}">Cadastrar Categoria</a>
+    <a href="{% url 'cadastrar_bem' %}">Cadastrar Bem</a>
+    <a href="{% url 'cadastrar_departamento' %}">Cadastrar Departamento</a>
+    <a href="{% url 'cadastrar_fornecedor' %}">Cadastrar Fornecedor</a>
+    <a href="{% url 'registrar_movimentacao' %}">registrar movimentacao</a>
+
+{% endblock %}
+
+

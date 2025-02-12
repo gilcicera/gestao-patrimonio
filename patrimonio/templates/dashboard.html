@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <p><strong>Total de Bens Cadastrados:</strong> {{ total_bens }}</p>
+
+    <h2>Distribuição por Categoria</h2>
+    <ul>
+        {% for categoria, quantidade in distribuicao_categorias.items %}
+            <li>{{ categoria }}: {{ quantidade }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Movimentações Recentes</h2>
+    <ul>
+        {% for movimentacao in movimentacoes_recentes %}
+            <li>{{ movimentacao.bem }} movido de {{ movimentacao.origem }} para {{ movimentacao.destino }} em {{ movimentacao.data_movimentacao }}</li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}
