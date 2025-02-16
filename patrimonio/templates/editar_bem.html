@@ -5,14 +5,77 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Editar Bem</h2>
+<div class="d-flex justify-content-center align-items-center pt-5">
+    <div class="card shadow-lg p-4" style="width: 500px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4 text-dark"><strong>Editar Bem</strong></h3>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Nome do Bem -->
+                <div class="mb-3">
+                    <label for="prod_nome" class="form-label">Nome:</label>
+                    {{ form.nome }}
+                </div>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }} 
-        <button type="submit" class="btn btn-success">Salvar alterações</button>
-    </form>
+                <!-- Código RFID -->
+                <div class="mb-3">
+                    <label for="codigo_rfid" class="form-label">Código RFID:</label>
+                    {{ form.codigo_rfid }}
+                </div>
+
+                <!-- Categoria -->
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria:</label>
+                    {{ form.categoria }}
+                </div>
+
+                <!-- Departamento -->
+                <div class="mb-3">
+                    <label for="departamento" class="form-label">Departamento:</label>
+                    {{ form.departamento }}
+                </div>
+
+                <!-- Fornecedor -->
+                <div class="mb-3">
+                    <label for="fornecedor" class="form-label">Fornecedor:</label>
+                    {{ form.fornecedor }}
+                </div>
+
+                <!-- Data de Aquisição -->
+                <div class="mb-3">
+                    <label for="data_aquisicao" class="form-label">Data de Aquisição:</label>
+                    {{ form.data_aquisicao }}
+                </div>
+
+                <!-- Data de Revisão -->
+                <div class="mb-3">
+                    <label for="data_revisao" class="form-label">Data de Revisão:</label>
+                    {{ form.data_revisao }}
+                </div>
+
+                <!-- Valor -->
+                <div class="mb-3">
+                    <label for="valor" class="form-label">Valor:</label>
+                    {{ form.valor }}
+                </div>
+
+                <!-- Status de Manutenção -->
+                <div class="mb-3 form-check">
+                    {{ form.status_manutencao }}
+                    <label class="form-check-label" for="status_manutencao">Em Manutenção?</label>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Salvar alterações</button>
+                </div>
+
+                <div class="mt-3 text-center">
+                    <a class="nav-link text-primary" href="{% url 'cadastro' %}"><small>Voltar à tela de cadastros</small></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
-
-
-
