@@ -1,12 +1,48 @@
 {% extends 'base.html' %}
 
-{% block title %}Registrar Movimentação{% endblock %}
-
 {% block content %}
-    <h1>Registrar Movimentação</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Salvar Movimentação</button>
-    </form>
+<div class="d-flex justify-content-center align-items-center vh-100 pt-5">
+    <div class="card shadow-lg p-4" style="width: 400px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4 text-dark"><strong>Registrar Movimentação</strong></h3>
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="bem" class="form-label">Bem:</label>
+                    <select class="form-control" id="bem" name="bem" required>
+                        <option value="">Selecione o Bem</option>
+                        {% for bem in bens %}
+                            <option value="{{ bem.id }}">{{ bem.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="origem" class="form-label">Departamento de Origem:</label>
+                    <select class="form-control" id="origem" name="origem" required>
+                        <option value="">Selecione o Departamento de Origem</option>
+                        {% for departamento in departamentos %}
+                            <option value="{{ departamento.id }}">{{ departamento.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="destino" class="form-label">Departamento de Destino:</label>
+                    <select class="form-control" id="destino" name="destino" required>
+                        <option value="">Selecione o Departamento de Destino</option>
+                        {% for departamento in departamentos %}
+                            <option value="{{ departamento.id }}">{{ departamento.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

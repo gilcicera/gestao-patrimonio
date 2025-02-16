@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Cadastrar Novo Departamento</h2>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Exibe os campos do formulário -->
-        <button type="submit">Cadastrar</button>
-    </form>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 400px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4"><strong>Adicionar Departamento</strong></h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome:</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                    <a class="nav-link text-primary text-center" href="{% url 'cadastro' %}"><small>Voltar a tela de cadastros</small></a>
+                </div>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

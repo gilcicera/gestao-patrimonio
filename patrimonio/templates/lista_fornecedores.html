@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Fornecedores{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center"><strong>Lista de Fornecedores</strong></h2>
+        <a href="{% url 'cadastrar_fornecedor' %}" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i> Adicionar Novo Fornecedor
+        </a>
+    </div>
+    <div class="row">
+        {% for fornecedor in fornecedores %}
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            <i class="fa-solid fa-truck"></i> {{ fornecedor.nome }}
+                        </h5>
+                        <p class="card-text">
+                            <strong>Contato:</strong> {{ fornecedor.contato }}
+                        </p>
+                        <div class="d-flex gap-2">                        
+                            <a href="{% url 'editar_fornecedor' fornecedor.id %}" class="btn btn-warning">
+                                <i class="fa-solid fa-pen-to-square"></i> Editar
+                            </a>
+                            <a href="{% url 'excluir_fornecedor' fornecedor.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este bem?')">
+                                <i class="fa-solid fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted text-center">Nenhum fornecedor cadastrado ainda.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

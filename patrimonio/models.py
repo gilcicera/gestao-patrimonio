@@ -26,6 +26,7 @@ class Bem(models.Model):
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE) # chave estrangeira para o departamento
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.SET_NULL, null=True, blank=True) # chave estrangeira para o fornecedor
     data_aquisicao = models.DateField() # data de aquisição do bem
+    data_revisao = models.DateField(blank=True, null=True) # data de revisão do bem
     valor = models.DecimalField(max_digits=10, decimal_places=2) # valor do bem
     status_manutencao = models.BooleanField(default=False) # status de manutenção do bem
 

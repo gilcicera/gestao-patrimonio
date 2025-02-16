@@ -1,11 +1,82 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Cadastrar Novo Bem</h2>
+<div class="d-flex justify-content-center align-items-center pt-5">
+    <div class="card shadow-lg p-4" style="width: 400px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4 text-dark"><strong>Adicionar Bem</strong></h3>
+            <form method="post">
+                {% csrf_token %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Exibe o formulário com os campos definidos -->
-        <button type="submit">Cadastrar</button>
-    </form>
+                <div class="mb-3">
+                    <label for="prod_nome" class="form-label">Nome:</label>
+                    <input type="text" class="form-control" id="prod_nome" name="nome" required placeholder="Nome do Bem">
+                </div>
+
+                <div class="mb-3">
+                    <label for="codigo_rfid" class="form-label">Código RFID:</label>
+                    <input type="text" class="form-control" id="codigo_rfid" name="codigo_rfid" required placeholder="Código RFID">
+                </div>
+
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria:</label>
+                    <select class="form-control" id="categoria" name="categoria" required>
+                        <option value="">Selecione a Categoria</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="departamento" class="form-label">Departamento:</label>
+                    <select class="form-control" id="departamento" name="departamento" required>
+                        <option value="">Selecione o Departamento</option>
+                        {% for departamento in departamentos %}
+                            <option value="{{ departamento.id }}">{{ departamento.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fornecedor" class="form-label">Fornecedor:</label>
+                    <select class="form-control" id="fornecedor" name="fornecedor" required>
+                        <option value="">Selecione o Fornecedor</option>
+                        {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="data_aquisicao" class="form-label">Data de Aquisição:</label>
+                    <input type="date" class="form-control" id="data_aquisicao" name="data_aquisicao" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="data_revisao" class="form-label">Data de Revisão:</label>
+                    <input type="date" class="form-control" id="data_revisao" name="data_revisao" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="valor" class="form-label">Valor:</label>
+                    <input type="number" class="form-control" id="valor" name="valor" required placeholder="Valor do Bem">
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="status_manutencao" name="status_manutencao">
+                    <label class="form-check-label" for="status_manutencao">Em Manutenção?</label>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+
+                <div class="mt-3 text-center">
+                    <a class="nav-link text-primary" href="{% url 'cadastro' %}"><small>Voltar à tela de cadastros</small></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

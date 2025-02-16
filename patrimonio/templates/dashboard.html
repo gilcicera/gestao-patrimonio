@@ -3,21 +3,81 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p><strong>Total de Bens Cadastrados:</strong> {{ total_bens }}</p>
-
-    <h2>Distribuição por Categoria</h2>
-    <ul>
-        {% for categoria, quantidade in distribuicao_categorias.items %}
-            <li>{{ categoria }}: {{ quantidade }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Movimentações Recentes</h2>
-    <ul>
-        {% for movimentacao in movimentacoes_recentes %}
-            <li>{{ movimentacao.bem }} movido de {{ movimentacao.origem }} para {{ movimentacao.destino }} em {{ movimentacao.data_movimentacao }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-4">
+        <h1 class="mb-4 text-center">Dashboard</h1>
     
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-boxes-stacked"></i><strong>Total de Bens Cadastrados</strong></h5>
+                        <p class="card-text display-6">{{ total_bens }}</p>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-coins"></i> <strong>Valor Total do Patrimônio</strong></h5>
+                        <p class="card-text display-6">R$ {{ valor_total_patrimonio }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Distribuição por Categoria -->
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-table-list"></i><strong>Distribuição por Categoria</strong></h5>
+                <ul class="list-group">
+                    {% for categoria, quantidade in distribuicao_categorias.items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ categoria }}
+                            <span class="badge bg-primary rounded-pill"> {{ quantidade }} </span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Status de Manutenção -->
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-screwdriver-wrench"></i><strong>Status de Manutenção</strong></h5>
+    
+                <h6 class="mt-3"><strong>Bens em Manutenção</strong></h6>
+                <ul class="list-group mb-3">
+                    {% for bem in bens_em_manutencao %}
+                        <li class="list-group-item">
+                            {{ bem.nome }} - {{ bem.categoria }} - R$ {{ bem.valor }}
+                        </li>
+                    {% endfor %}
+                </ul>
+    
+                <h6 class="mt-3"><strong>Bens Próximos da Revisão</strong></h6>
+                <ul class="list-group">
+                    {% for bem in bens_proximos_revisao %}
+                        <li class="list-group-item">
+                            {{ bem.nome }} - {{ bem.categoria }} - {{ bem.data_revisao|date:"d/m/Y" }} - R$ {{ bem.valor }}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Nenhum bem próximo da revisão.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- 5 Movimentações Recentes -->
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-arrow-right-arrow-left"></i> <strong>5 Movimentações Recentes</strong></h5>
+                <ul class="list-group">
+                    {% for movimentacao in movimentacoes_recentes %}
+                        <li class="list-group-item">
+                            {{ movimentacao.bem.nome }} - {{ movimentacao.origem }} → {{ movimentacao.destino }} - {{ movimentacao.data_movimentacao|date:"d/m/Y H:i" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+    </div>
+
 {% endblock %}

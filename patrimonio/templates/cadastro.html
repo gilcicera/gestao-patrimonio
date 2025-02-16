@@ -3,13 +3,38 @@
 {% block title %}Cadastro{% endblock %}
 
 {% block content %}
-    <h1>Página de Cadastros</h1>
-    <p>Aqui você pode cadastrar novos bens, categorias, fornecedores e departamentos.</p>
-    <a href="{% url 'cadastrar_categoria' %}">Cadastrar Categoria</a>
-    <a href="{% url 'cadastrar_bem' %}">Cadastrar Bem</a>
-    <a href="{% url 'cadastrar_departamento' %}">Cadastrar Departamento</a>
-    <a href="{% url 'cadastrar_fornecedor' %}">Cadastrar Fornecedor</a>
-    <a href="{% url 'registrar_movimentacao' %}">registrar movimentacao</a>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Página de Cadastros</h2>
+    <p class="text-center mb-5">Aqui você pode cadastrar novos bens, categorias, fornecedores, departamentos e, até, registrar movimentações.</p>
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'cadastrar_categoria' %}" class="btn btn-primary w-100 py-3">
+                <i class="fa-solid fa-tags"></i> Cadastrar Categoria
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'cadastrar_bem' %}" class="btn btn-success w-100 py-3">
+                <i class="fa-solid fa-box"></i> Cadastrar Bem
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'cadastrar_departamento' %}" class="btn btn-info w-100 py-3">
+                <i class="fa-solid fa-building"></i> Cadastrar Departamento
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'cadastrar_fornecedor' %}" class="btn btn-warning w-100 py-3">
+                <i class="fa-solid fa-truck"></i> Cadastrar Fornecedor
+            </a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'registrar_movimentacao' %}" class="btn btn-secondary w-100 py-3">
+                <i class="fa-solid fa-arrows-spin"></i> Registrar Movimentação
+            </a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 

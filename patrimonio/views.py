@@ -1,30 +1,42 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from django.db.models import Sum
+from datetime import date, timedelta # timedelta é usado para calcular a data de hoje menos um dia
 from .models import Bem, Categoria, Departamento, Movimentacao, Fornecedor
 from .forms import BemForm,CategoriaForm, DepartamentoForm, FornecedorForm, MovimentacaoForm
 
 def cadastro(request):
     return render(request, 'cadastro.html')
-#### TROCAR ASPAS DUPLAS PARA SIMPLESSSS
 
 #views para cadastro
+
 def cadastrar_bem(request):
+    departamentos = Departamento.objects.all()  # Busca todos os departamentos
+    categorias = Categoria.objects.all()  # Busca todas as categorias
+    fornecedores = Fornecedor.objects.all()  # Busca todos os fornecedores
+
     if request.method == 'POST':
         form = BemForm(request.POST)
         if form.is_valid():
-            form.save()  # Salva o novo bem no banco de dados
-            return redirect('dashboard') 
+            form.save()
+            return redirect('lista_bens')  # Redirecionar após salvar
     else:
         form = BemForm()
 
-    return render(request, 'cadastrar_bem.html', {'form': form})
+    return render(request, 'cadastrar_bem.html', {
+        'form': form,
+        'departamentos': departamentos,  # Passando os departamentos
+        'categorias': categorias,  # Passando as categorias
+        'fornecedores': fornecedores,  # Passando os fornecedores
+    })
+
 
 def cadastrar_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
         if form.is_valid():
             form.save()
-           # return redirect('dashboard') 
+        return redirect('dashboard') 
     else:
         form = CategoriaForm()
 
@@ -36,7 +48,7 @@ def cadastrar_departamento(request):
         form = DepartamentoForm(request.POST)
         if form.is_valid():
             form.save()
-            #return redirect('lista_departamentos')  # Redireciona para a lista de departamentos
+            return redirect('dashboard')  # Redireciona para a lista de departamentos
     else:
         form = DepartamentoForm()
 
@@ -47,7 +59,7 @@ def cadastrar_fornecedor(request):
         form = FornecedorForm(request.POST)
         if form.is_valid():
             form.save()
-            #return redirect('lista_departamentos')  # Redireciona para a lista de departamentos
+            return redirect('lista_fornecedores')
     else:
         form = FornecedorForm()
 
@@ -58,10 +70,14 @@ def registrar_movimentacao(request):
         form = MovimentacaoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_bens')
+            return redirect('dashboard')  # Redirecione para a página de lista de movimentações ou qualquer outra página.
     else:
         form = MovimentacaoForm()
-    return render(request, 'registrar_movimentacao.html', {'form': form})
+
+    bens = Bem.objects.all()
+    departamentos = Departamento.objects.all()
+
+    return render(request, 'registrar_movimentacao.html', {'form': form, 'bens': bens, 'departamentos': departamentos})
 
 # views para edição
 
@@ -76,64 +92,32 @@ def editar_bem(request, bem_id):
         form = BemForm(instance=bem)
     return render(request, 'editar_bem.html', {'form': form})
 
-def editar_categoria(request, categoria_id):
-    categoria = get_object_or_404(Categoria, id=categoria_id)
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST, instance=categoria)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_bens')  
-    else:
-        form = CategoriaForm(instance=categoria)
-    return render(request, 'editar_categoria.html', {'form': form})
-
-def editar_departamento(request, departamento_id):
-    departamento = get_object_or_404(Departamento, id=departamento_id)
-    if request.method == "POST":
-        form = DepartamentoForm(request.POST, instance=departamento)
-        if form.is_valid():
-            form.save()
-            return redirect("lista_bens")
-    else:
-        form = DepartamentoForm(instance=departamento)
-    return render(request, "editar_departamento.html", {"form": form})
 
 def editar_fornecedor(request, fornecedor_id):
     fornecedor = get_object_or_404(Fornecedor, id=fornecedor_id)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = FornecedorForm(request.POST, instance=fornecedor)
         if form.is_valid():
             form.save()
-            return redirect("lista_bens")
+            return redirect('lista_fornecedores')
     else:
         form = FornecedorForm(instance=fornecedor)
-    return render(request, "editar_fornecedor.html", {"form": form})
+
+    return render(request, 'editar_fornecedor.html', {'form': form})
+
 
 
 # viewss para excluir
-def excluir_categoria(request, pk):
-    categoria = get_object_or_404(Categoria, pk=pk)
-    if request.method in ['POST']:
-        categoria.delete()
-    return redirect('listar_categorias')
+def excluir_fornecedor(request, fornecedor_id):
+    fornecedor = get_object_or_404(Fornecedor, id=fornecedor_id)
+    fornecedor.delete()
+    return redirect('lista_fornecedores')
 
-def excluir_fornecedor(request, pk):
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    if request.method in ['POST']:
-        fornecedor.delete()
-    return redirect('listar_fornecedores')
-
-def excluir_departamento(request, pk):
-    departamento = get_object_or_404(Departamento, pk=pk)
-    if request.method in ['POST']:
-        departamento.delete()
-    return redirect('listar_departamentos')
-
-def excluir_bem(request, pk):
-    bem = get_object_or_404(Bem, pk=pk)
+def excluir_bem(request, bem_id):
+    bem = get_object_or_404(Bem, id=bem_id)
     if request.method in ['POST']:
         bem.delete()
-    return redirect('listar_bens')
+    return redirect('lista_bens')
 
 
 
@@ -142,11 +126,18 @@ def dashboard(request):
     total_bens = Bem.objects.count() # Total de bens
     distribuicao_categorias = {categoria.nome: Bem.objects.filter(categoria=categoria).count() for categoria in Categoria.objects.all()} # é uma lista de dicionários para cada categoria
     movimentacoes_recentes = Movimentacao.objects.order_by("-data_movimentacao")[:5] # quer dizer 5 ultimas movimentacoes
+    valor_total_patrimonio = Bem.objects.aggregate(Sum('valor'))['valor__sum'] or 0 # valor total do patrimonio
+    data_limite = date.today() + timedelta(days=7) # Bens próximos da revisão (revisão em até 7 dias)
+    bens_proximos_revisao = Bem.objects.filter(data_revisao__lte=data_limite, status_manutencao=False)
+    bens_em_manutencao = Bem.objects.filter(status_manutencao=True)
 
     context = { # contexto para a view, o contexto é um dicionário
         "total_bens": total_bens, # Total de bens
         "distribuicao_categorias": distribuicao_categorias, # Dados de distribuição por categoria
         "movimentacoes_recentes": movimentacoes_recentes, # 5 ultimas movimentações
+        "bens_proximos_revisao": bens_proximos_revisao,
+        "valor_total_patrimonio": valor_total_patrimonio,
+        "bens_em_manutencao": bens_em_manutencao,
     }
     return render(request, "dashboard.html", context) # renderiza a view dashboard.html com o contexto
 
@@ -171,8 +162,8 @@ def lista_bens(request):
     bens = Bem.objects.all() # lista de todos os bens
     return render(request, "lista_bens.html", {"bens": bens}) # renderiza a view lista_bens.html com a lista de bens
 
+def lista_fornecedores(request):
+    fornecedores = Fornecedor.objects.all()
+    return render(request, 'lista_fornecedores.html', {'fornecedores': fornecedores})
 
-# Página de detalhes de um bem específico
-def detalhe_bem(request, bem_id):
-    bem = get_object_or_404(Bem, id=bem_id)
-    return render(request, "detalhe_bem.html", {"bem": bem})
+
